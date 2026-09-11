@@ -1,4 +1,4 @@
-# @chengchengzhao/dsh-cost-manager
+# @chengge/dsh-cost-manager
 
 [中文](README.zh.md) | English
 
@@ -50,8 +50,8 @@ marks the tab with a red dot if a page is not ready — instead of showing a bla
 frame. The sidebar entry opens `/board` in a new tab.
 
 Note the board depends on the plugins being present together: `/cost` comes from
-this plugin, `/dshm` from `@chengchengzhao/dsh-session-manager`, `/skills` from
-`@chengchengzhao/dsh-skill-catalog`.
+this plugin, `/dshm` from `@chengge/dsh-session-manager`, `/skills` from
+`@chengge/dsh-skill-catalog`.
 
 **Layout rule: `/board` renders no header of its own.** It only draws a thin tab
 strip (`.tabstrip` — deliberately not called `header`, and with a reduced font
@@ -63,7 +63,7 @@ header. `test-smoke.mjs` asserts this: the `/board` HTML must contain **zero**
   as **plain JavaScript with `React.createElement`** (no `import`, no TS, no JSX);
   React is injected by the module loader.
 - **Visual contract**: `lib/page.js` shares its design tokens and header structure
-  with the other `@chengchengzhao` pages — the same `:root` variables
+  with the other `@chengge` pages — the same `:root` variables
   (`--bg/--panel/--border/--text/--muted/--accent/--green/--yellow/--red/--radius`),
   the same `<header>` shape (brand + subtitle + toolbar), and the same
   `.cards/.card/.panel/.foot` vocabulary. Align style changes across all three

@@ -23,7 +23,7 @@ ck('语法可解析', (() => { try { new Function(src); return true } catch { re
 ck('无 import 语句', !/^\s*import\s/m.test(src))
 ck('无 JSX', !/<\/[A-Za-z]/.test(src))
 ck('用 __ModuleLoader__.load 包装', /window\.__ModuleLoader__\.load\(\{/.test(src))
-ck('id 与包名一致', /id:\s*'@chengchengzhao\/dsh-skill-catalog'/.test(src))
+ck('id 与包名一致', /id:\s*'@chengge\/dsh-skill-catalog'/.test(src))
 ck('React 由 require 注入', /var React = require\('react'\)/.test(src))
 ck('用 React.createElement', /React\.createElement/.test(src))
 ck('导出 apply', /exports\.apply = apply/.test(src))

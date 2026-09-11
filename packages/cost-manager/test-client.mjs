@@ -26,7 +26,7 @@ if (!spec) {
   process.exit(1)
 }
 console.log('模块 id:', spec.id)
-if (spec.id !== '@chengchengzhao/dsh-cost-manager') {
+if (spec.id !== '@chengge/dsh-cost-manager') {
   console.error('❌ 模块 id 不匹配，实际:', spec.id)
   process.exitCode = 1
 }

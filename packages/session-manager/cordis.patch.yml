@@ -1,4 +1,4 @@
 # 组合补丁：安装后把插件行插入 profile 组合。
 - insert:
     - id: session-manager
-      name: '@chengchengzhao/dsh-session-manager'
+      name: '@chengge/dsh-session-manager'

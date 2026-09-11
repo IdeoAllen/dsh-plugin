@@ -1,5 +1,5 @@
 {
-  "name": "@chengchengzhao/dsh-skill-catalog",
+  "name": "@chengge/dsh-skill-catalog",
   "version": "0.1.0",
   "description": "DSH 技能总览插件：设置页「技能总览」面板 + DSH 端口上的完整看板（/skills）。实时扫描 ~/.agents/skills，展示用途/触发词/边界/正文骨架/关联模型/验证级别。",
   "license": "Apache-2.0",

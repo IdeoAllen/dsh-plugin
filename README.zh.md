@@ -9,9 +9,9 @@ DeepSeek Harness（DSH）Web GUI 的**插件家族**。三个插件共用同一�
 
 | 包 | 作用 | 入口 |
 | --- | --- | --- |
-| [`@chengchengzhao/dsh-cost-manager`](packages/cost-manager) | 余额、花费、消耗速率、模型价目对齐，以及「防死」硬地板。注册 4 个 Agent 可调用工具。 | 设置页面板 · `/cost` · `/board` |
-| [`@chengchengzhao/dsh-session-manager`](packages/session-manager) | 会话浏览、跨会话全文搜索、每步 token 趋势、导出与归档。把原独立的 dshm 单页并入 DSH 端口。 | 设置页面板 · `/dshm` |
-| [`@chengchengzhao/dsh-skill-catalog`](packages/skill-catalog) | 技能总览：每个技能是什么、怎么用、触发条件、边界、关联模型、验证级别。 | 设置页面板 · `/skills` · 运维看板页签 |
+| [`@chengge/dsh-cost-manager`](packages/cost-manager) | 余额、花费、消耗速率、模型价目对齐，以及「防死」硬地板。注册 4 个 Agent 可调用工具。 | 设置页面板 · `/cost` · `/board` |
+| [`@chengge/dsh-session-manager`](packages/session-manager) | 会话浏览、跨会话全文搜索、每步 token 趋势、导出与归档。把原独立的 dshm 单页并入 DSH 端口。 | 设置页面板 · `/dshm` |
+| [`@chengge/dsh-skill-catalog`](packages/skill-catalog) | 技能总览：每个技能是什么、怎么用、触发条件、边界、关联模型、验证级别。 | 设置页面板 · `/skills` · 运维看板页签 |
 
 **运维看板**（`/board`，由 `cost-manager` 提供）是一条细页签栏 + 同源 iframe，三个看板因此共用一个浏览器标签。
 切页签只切 `display`，iframe 不卸载、状态不丢。
@@ -26,9 +26,9 @@ DeepSeek Harness（DSH）Web GUI 的**插件家族**。三个插件共用同一�
 
 ```bash
 # 在 DSH profile 目录下执行
-dsh plugin --profile web add @chengchengzhao/dsh-cost-manager
-dsh plugin --profile web add @chengchengzhao/dsh-session-manager
-dsh plugin --profile web add @chengchengzhao/dsh-skill-catalog
+dsh plugin --profile web add @chengge/dsh-cost-manager
+dsh plugin --profile web add @chengge/dsh-session-manager
+dsh plugin --profile web add @chengge/dsh-skill-catalog
 ```
 
 改动 profile 的 `bundles` **必须重启 DSH** —— bundles 是启动时组装的，

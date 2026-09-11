@@ -1,4 +1,4 @@
-# @chengchengzhao/dsh-session-manager
+# @chengge/dsh-session-manager
 
 DSH 会话管理插件：把原本独立的 **dshm** 网页（单独进程 + `127.0.0.1:8787`）**统一到 DSH 自身端口上**，
 并在设置页提供一个「会话管理」面板，与 DSH GUI 融为一个界面。
