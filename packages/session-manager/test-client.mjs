@@ -50,7 +50,7 @@ const check = (label, cond, extra) => {
 await import(new URL('./lib/client.js', import.meta.url).href)
 console.log('===== bundle =====')
 check('window.__ModuleLoader__.load 被调用', Boolean(bundle))
-check('模块 id 正确', bundle && bundle.id === '@chengge/dsh-session-manager', bundle && bundle.id)
+check('模块 id 正确', bundle && bundle.id === '@dachengge/dsh-session-manager', bundle && bundle.id)
 
 const mod = bundle.factory(requireShim)
 console.log('\n===== 导出与 slot 注册 =====')

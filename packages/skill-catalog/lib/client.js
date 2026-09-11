@@ -1,4 +1,4 @@
-// @chengge/dsh-skill-catalog — 浏览器半区（设置页「技能总览」面板）
+// @dachengge/dsh-skill-catalog — 浏览器半区（设置页「技能总览」面板）
 //
 // DSH 客户端插件 bundle 格式：window.__ModuleLoader__.load({ id, factory })。
 // 必须是纯 JavaScript：禁止 import / TypeScript / JSX；React 由模块加载器注入。
@@ -8,7 +8,7 @@
 // 布局用**自适应卡片列表**而非多列表格——设置面板宽度通常在 500-700px，
 // 6 列表格会被挤到每列只剩几个字（上一版的实际问题）。
 window.__ModuleLoader__.load({
-  id: '@chengge/dsh-skill-catalog',
+  id: '@dachengge/dsh-skill-catalog',
   factory: (require) => {
     var module = { exports: {} }
     var exports = module.exports

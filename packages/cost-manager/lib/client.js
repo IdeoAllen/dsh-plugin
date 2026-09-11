@@ -1,11 +1,11 @@
-// @chengge/dsh-cost-manager — 浏览器半区（设置页「费用与余额」面板）
+// @dachengge/dsh-cost-manager — 浏览器半区（设置页「费用与余额」面板）
 //
 // DSH 客户端插件 bundle 格式：window.__ModuleLoader__.load({ id, factory })。
 // 注意：此文件必须是纯 JavaScript，禁止 import / TypeScript / JSX —— React 由
 // 模块加载器注入（require("react")），组件用 React.createElement 构造。
 // 数据来自 host 半区注册的 JSON 路由：GET /dsh-cost/api/overview
 window.__ModuleLoader__.load({
-  id: '@chengge/dsh-cost-manager',
+  id: '@dachengge/dsh-cost-manager',
   factory: (require) => {
     var module = { exports: {} }
     var exports = module.exports

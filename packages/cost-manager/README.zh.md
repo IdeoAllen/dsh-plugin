@@ -1,4 +1,4 @@
-# @chengge/dsh-cost-manager
+# @dachengge/dsh-cost-manager
 
 DSH 成本管理插件：把余额、费用、模型能力、任务会话用量统计交给 Agent 自动调用，并内置「防死」机制（硬地板 + 欠费切换建议）。
 
@@ -40,7 +40,7 @@ GET /board ·  /board/         运维看板：费用与余额 / 会话管理 两
 页签选择记在 `localStorage`，也支持 `#cost` / `#dshm` 直达。打开时会 `HEAD` 预检两个地址，
 哪一页没就绪（插件没装/没重启）就在该页签上标红点，而不是白屏。
 侧栏底部由 `sidebar.footer.action` 提供「📊 运维看板」入口（新标签打开 `/board`）。
-注意：看板依赖两个插件同时在位——`/cost` 来自本插件，`/dshm` 来自 `@chengge/dsh-session-manager`。
+注意：看板依赖两个插件同时在位——`/cost` 来自本插件，`/dshm` 来自 `@dachengge/dsh-session-manager`。
 
 **布局铁律：`/board` 不渲染自己的页头。** 它只有一条细页签栏（`.tabstrip`，不叫 `header`、
 字号也刻意压小），页面身份交给被嵌入页面自己的页头。否则会出现"重复头"（看板一层 + iframe 内一层）。
@@ -74,7 +74,7 @@ npm pack --dry-run        # 复核包内容
 npm publish --access public
 ```
 
-发布前置：① ✅ LICENSE = **Apache-2.0**（已附全文，含专利授权，保留署名）；② ⏳ npm 账号登录（`npm login`，当前机器未登录）；③ ⏳ 真机装进 profile 验证（`dsh plugin --profile web add @chengge/dsh-cost-manager` + 重启）。
+发布前置：① ✅ LICENSE = **Apache-2.0**（已附全文，含专利授权，保留署名）；② ⏳ npm 账号登录（`npm login`，当前机器未登录）；③ ⏳ 真机装进 profile 验证（`dsh plugin --profile web add @dachengge/dsh-cost-manager` + 重启）。
 
 当前包内容（`npm pack --dry-run`）：11 个文件 / 26.1 kB —— LICENSE、README、cordis.patch.yml、dsh.plugin.json、package.json、lib/index.js、lib/client.js、lib/core/{balances,sessions,pricing}.mjs、lib/core/data/catalog.json。
 

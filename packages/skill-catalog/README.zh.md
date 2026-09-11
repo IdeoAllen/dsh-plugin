@@ -1,7 +1,7 @@
-# @chengge/dsh-skill-catalog
+# @dachengge/dsh-skill-catalog
 
-DSH 第三个自定义插件 —— **技能总览**。与 `@chengge/dsh-cost-manager`（费用与余额）、
-`@chengge/dsh-session-manager`（会话管理）出自同一套写法，界面与配色保持一致。
+DSH 第三个自定义插件 —— **技能总览**。与 `@dachengge/dsh-cost-manager`（费用与余额）、
+`@dachengge/dsh-session-manager`（会话管理）出自同一套写法，界面与配色保持一致。
 
 ## 提供什么
 
@@ -77,12 +77,12 @@ profile 的 `package.json`：
 
 ```json
 "dependencies": {
-  "@chengge/dsh-skill-catalog": "link:C:/Users/43594/Desktop/harness中心/工具/skill-catalog/dsh-plugin"
+  "@dachengge/dsh-skill-catalog": "link:C:/Users/43594/Desktop/harness中心/工具/skill-catalog/dsh-plugin"
 },
-"dsh": { "profile": { "bundles": [ "...", "@chengge/dsh-skill-catalog" ] } }
+"dsh": { "profile": { "bundles": [ "...", "@dachengge/dsh-skill-catalog" ] } }
 ```
 
-`node_modules/@chengge/dsh-skill-catalog` 需为 **Junction** 指向该目录（与另两个 `@chengge` 插件同款）。
+`node_modules/@dachengge/dsh-skill-catalog` 需为 **Junction** 指向该目录（与另两个 `@dachengge` 插件同款）。
 
 改完 **必须重启 DSH**：`bundles` 是启动时组装的，
 `patchReload: "live"` 只对 `cordis.patch.yml` 的热更新生效。
