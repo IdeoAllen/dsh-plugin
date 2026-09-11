@@ -1,10 +1,10 @@
 {
-  "id": "dsh-external/dsh-cost-manager",
-  "version": "0.1.0",
+  "id": "@dachengge/dsh-cost-manager",
+  "version": "0.1.1",
   "main": "./lib/index.js",
   "description": "DSH 成本管理插件：余额/费用/模型能力/任务会话统计 + 防死（硬地板、消耗速率与可撑时长）。含设置页「费用与余额」面板。",
   "engines": {
-    "dsh": ">=0.1.1"
+    "dsh": ">=0.1.5-rc.1"
   },
   "contributes": {
     "tools": ["cost_status", "cost_stats", "cost_report", "cost_models"],

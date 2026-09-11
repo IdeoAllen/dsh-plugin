@@ -121,12 +121,22 @@ React via `require`, and registration through official slots rather than DOM edi
 
 ## Maintenance
 
-After editing the dashboard page, sync the artifact into the plugin:
+The renderer ships **with this package**, so the repo is self-sufficient — you do
+not need the author's tooling to rebuild the dashboard:
 
 ```bash
-node <tools>/skill-catalog/build-html.mjs            # regenerate the dashboard HTML
-node <tools>/skill-catalog/dsh-plugin/sync-core.mjs  # copy it into lib/core/web
+node tools/build-html.mjs    # render 技能总览.html
+node tools/verify-html.mjs   # static checks (no browser needed)
+node sync-core.mjs           # copy it into lib/core/web/index.html
 ```
+
+`tools/build-html.mjs` resolves its data in this order:
+
+1. `DSH_SKILL_CATALOG_DIR`, if set — the authoring workspace keeps a pre-built
+   `catalog.json` there (produced by the skill-registry tooling, richer data);
+2. otherwise it **falls back to this package's own `lib/catalog.js`**, which scans
+   `~/.agents/skills` live. No pre-generated data file is required, so a fresh
+   clone renders fine — just with fewer skills than a populated machine.
 
 `sync-core.mjs` only copies the HTML; the host half rewrites `./catalog.json`
 to `/skills/api/catalog`, so the page always reads live data. The page is **not

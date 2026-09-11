@@ -1,4 +1,6 @@
 # 依赖与构建产物
+# 渲染器的中间产物：真正的发布副本是 lib/core/web/index.html（由 sync-core.mjs 生成）
+packages/skill-catalog/tools/技能总览.html
 node_modules/
 *.tgz
 

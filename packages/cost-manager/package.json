@@ -1,6 +1,6 @@
 {
   "name": "@dachengge/dsh-cost-manager",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DSH 成本管理插件：余额/费用/模型能力/任务会话统计 + 防死（硬地板与欠费切换建议）。适配用户绑定的模型，自动扫描会话用量。",
   "license": "Apache-2.0",
   "author": "成哥聊AI (赵成成)",

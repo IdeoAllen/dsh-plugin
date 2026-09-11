@@ -91,15 +91,24 @@ profile 的 `package.json`：
 
 ## 维护
 
-改了看板页面后，把工具目录的产物同步进来：
+渲染器**随包一起发布**，所以仓库是自包含的 —— 重建看板不需要作者本机的工具目录：
 
 ```bash
-node 工具/skill-catalog/build-html.mjs     # 重新生成 技能总览.html
-node 工具/skill-catalog/dsh-plugin/sync-core.mjs   # 同步进插件
+node tools/build-html.mjs    # 渲染 技能总览.html
+node tools/verify-html.mjs   # 静态校验（不需要浏览器）
+node sync-core.mjs           # 复制进 lib/core/web/index.html
 ```
 
+`tools/build-html.mjs` 按这个顺序找数据：
+
+1. 设了 `DSH_SKILL_CATALOG_DIR` → 用那个目录（作者的开发工作区在那里放预生成的
+   `catalog.json`，由 skill-registry 工具链产出，字段更全）；
+2. 否则**回退到本包自己的 `lib/catalog.js`**，它现场扫 `~/.agents/skills`。
+   不需要任何预生成数据文件，所以刚 clone 下来也能渲染成功 —— 只是技能数比装满的机器少。
+
 `sync-core.mjs` 只复制 HTML；host 半区会把页面里的 `./catalog.json`
-改写成 `/skills/api/catalog`，从而自动走真实时数据。
+改写成 `/skills/api/catalog`，从而自动走真实时数据。页面**不缓存**，
+所以改完 HTML 刷新页面即可，不用重启 DSH。
 
 ## 与社区插件 `@linxin666/dsh-client-ui-skill-explorer` 共存
 

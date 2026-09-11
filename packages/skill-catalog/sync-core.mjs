@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * sync-core.mjs —— 把工具目录生成的看板页面同步进插件
+ * sync-core.mjs —— 把渲染器产出的看板页面同步进插件
  *
- * 插件必须**自包含**（不能依赖包外相对路径），因此把 `../技能总览.html`
+ * 插件必须**自包含**（不能依赖包外相对路径），因此把 `技能总览.html`
  * 复制到 `lib/core/web/index.html`。host 半区再把这个文件里的
  * `./catalog.json` 改写成 `/skills/api/catalog`，从而走实时数据。
  *
@@ -15,15 +15,25 @@ import { fileURLToPath } from 'node:url'
 const HERE = dirname(fileURLToPath(import.meta.url))
 
 /**
- * 从插件目录向上搜索工作区里的看板产物目录（判据：含 build-html.mjs）。
- * 刻意用搜索而不是固定相对层数：插件在仓库里的位置一变，固定层数就会指错。
- * 可用 `DSH_SKILL_CATALOG_DIR` 显式覆盖。
+ * 找 `技能总览.html` 的所在目录。三条路径按序尝试：
+ *
+ *   1. `DSH_SKILL_CATALOG_DIR` —— 显式指定（开发工作区用它指向 工具/skill-catalog）
+ *   2. 包内 `tools/`        —— 独立仓库场景：渲染器就在那儿，产物也落在那儿
+ *   3. 向上搜 `工具/skill-catalog` —— 兼容旧的工作区布局
+ *
+ * 用搜索而不是固定相对层数：插件在仓库里的位置一变，固定层数就会指错。
  */
-function findToolDir(start) {
-  let dir = start
+function findHtmlDir() {
+  const env = process.env.DSH_SKILL_CATALOG_DIR
+  if (env && existsSync(join(env, '技能总览.html'))) return env
+
+  const local = join(HERE, 'tools')
+  if (existsSync(join(local, '技能总览.html'))) return local
+
+  let dir = HERE
   for (let i = 0; i < 10; i++) {
     const cand = join(dir, '工具', 'skill-catalog')
-    if (existsSync(join(cand, 'build-html.mjs'))) return cand
+    if (existsSync(join(cand, '技能总览.html'))) return cand
     const up = dirname(dir)
     if (up === dir) break
     dir = up
@@ -31,15 +41,15 @@ function findToolDir(start) {
   return null
 }
 
-const TOOL_DIR = process.env.DSH_SKILL_CATALOG_DIR || findToolDir(HERE)
-const SRC = TOOL_DIR ? join(TOOL_DIR, '技能总览.html') : join(HERE, '技能总览.html')
+const HTML_DIR = findHtmlDir()
+const SRC = HTML_DIR ? join(HTML_DIR, '技能总览.html') : join(HERE, 'tools', '技能总览.html')
 const DEST_DIR = join(HERE, 'lib', 'core', 'web')
 const DEST = join(DEST_DIR, 'index.html')
 
 if (!existsSync(SRC)) {
   console.error(`源文件不存在：${SRC}`)
-  console.error('先跑：node 工具/skill-catalog/build-html.mjs')
-  console.error('（若看板工具目录不在默认位置，用 DSH_SKILL_CATALOG_DIR=<路径> 指定）')
+  console.error('先跑：node tools/build-html.mjs')
+  console.error('（若产物不在默认位置，用 DSH_SKILL_CATALOG_DIR=<路径> 指定）')
   process.exit(1)
 }
 

@@ -1,10 +1,10 @@
 {
-  "id": "dsh-external/dsh-skill-catalog",
-  "version": "0.1.0",
+  "id": "@dachengge/dsh-skill-catalog",
+  "version": "0.1.1",
   "main": "./lib/index.js",
   "description": "DSH 技能总览插件：设置页「技能总览」面板，并在 DSH 自身端口上提供完整看板（/skills）。实时读取技能库，展示是什么/干什么用/怎么用/触发条件/什么时候别用/关联模型/验证级别。",
   "engines": {
-    "dsh": ">=0.1.1"
+    "dsh": ">=0.1.5-rc.1"
   },
   "contributes": {
     "tools": [],
