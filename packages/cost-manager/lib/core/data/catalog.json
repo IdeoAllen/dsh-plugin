@@ -1,0 +1,702 @@
+{
+  "schema": "cost-manager/catalog/v1",
+  "updatedAt": "2026-09-10",
+  "currency": "CNY",
+  "notes": [
+    "单价来源分三类：measured=实测扣费（最可信）、official=平台官方价目、estimate=估算（需标注）。",
+    "质量评级：basis=objective 表示依据客观指标（细节量/速度/是否崩坏/是否实测）；byUser=null 表示审美尚未人工确认。",
+    "禁用原则：把 estimate 当成 measured 使用；把未人工确认的评级说成'最好'。"
+  ],
+  "models": [
+    {
+      "platform": "MXAPI",
+      "id": "nano-banana-2",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.2,
+      "priceSource": "measured",
+      "priceEvidence": "消费明细 -20 积分（1 元 = 100 积分）",
+      "latencySec": null,
+      "speed": "同步返回（约 40–60 秒）",
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "同模型对比：细节量 1295KB，无崩坏，贴合提示词；审美待人工确认"
+      },
+      "scenes": [
+        "封面",
+        "成品配图",
+        "高细节插画"
+      ],
+      "status": "✅ 可用",
+      "note": "同类高质量图里最便宜；默认首选"
+    },
+    {
+      "platform": "MXAPI",
+      "id": "gpt-image-2",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.1,
+      "priceSource": "measured",
+      "priceEvidence": "消费明细 -10 积分",
+      "latencySec": null,
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "同模型在 Evolink 实测 1211KB、无崩坏"
+      },
+      "scenes": [
+        "成品配图",
+        "需要画面内文字的图"
+      ],
+      "status": "✅ 可用",
+      "note": "比 Evolink 同模型便宜约 3 倍（Evolink 实测 ¥0.324）"
+    },
+    {
+      "platform": "MXAPI",
+      "id": "nano-banana-pro",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.2,
+      "priceSource": "measured",
+      "scenes": [
+        "高要求成品图"
+      ],
+      "status": "✅ 可用",
+      "note": "与 nano-banana-2 同价（¥0.20），体积 1.1MB",
+      "priceEvidence": "消费明细 -20 积分",
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 1148KB、无崩坏"
+      }
+    },
+    {
+      "platform": "MXAPI",
+      "id": "gemini-3-pro-image-preview",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.2,
+      "priceSource": "measured",
+      "scenes": [
+        "高要求成品图",
+        "复杂构图"
+      ],
+      "status": "✅ 可用",
+      "note": "与 nano-banana-pro 同价同通道；体积 1.3MB",
+      "priceEvidence": "消费明细 -20 积分",
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 1336KB、无崩坏（明细标注为 Nano Banana Pro 通道）"
+      }
+    },
+    {
+      "platform": "Evolink",
+      "id": "z-image-turbo",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.022,
+      "priceSource": "measured",
+      "priceEvidence": "实测 0.26 credits = ¥0.026；官方标 $0.0033",
+      "latencySec": 16,
+      "quality": {
+        "grade": "B",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 89KB、16 秒、无崩坏，细节量明显低于高端模型"
+      },
+      "scenes": [
+        "批量试稿",
+        "构图探索",
+        "草稿"
+      ],
+      "status": "✅ 可用",
+      "note": "最便宜、最快；用于'先试 5 版再定稿'的工作流"
+    },
+    {
+      "platform": "Evolink",
+      "id": "nano-banana-2-beta",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.24,
+      "priceSource": "measured",
+      "priceEvidence": "实测 2.4 credits = ¥0.24",
+      "latencySec": 46,
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 1310KB（细节量最大）、无崩坏"
+      },
+      "scenes": [
+        "封面",
+        "成品配图"
+      ],
+      "status": "✅ 可用",
+      "note": "同模型在 MXAPI 只要 ¥0.20，优先走 MXAPI"
+    },
+    {
+      "platform": "Evolink",
+      "id": "gpt-image-2",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.324,
+      "priceSource": "measured",
+      "priceEvidence": "实测 3.2382 credits = ¥0.324（官方标价仅 $0.015）",
+      "latencySec": 52,
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 1211KB、无崩坏"
+      },
+      "scenes": [
+        "成品配图"
+      ],
+      "status": "⚠️ 计价偏高",
+      "note": "实际收费是标价的 3.2 倍，建议改用 MXAPI 同模型（¥0.10）"
+    },
+    {
+      "platform": "Evolink",
+      "id": "doubao-seedream-5.0-pro",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.23,
+      "priceSource": "measured",
+      "priceEvidence": "实测 2.295 credits = ¥0.23",
+      "latencySec": 63,
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 185KB、无崩坏；即梦 5.0"
+      },
+      "scenes": [
+        "中文元素画面",
+        "国内海报风"
+      ],
+      "status": "✅ 可用",
+      "note": "中文语境更稳"
+    },
+    {
+      "platform": "Evolink",
+      "id": "qwen-image-3.0",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.02,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.003/张",
+      "scenes": [
+        "批量配图",
+        "试稿"
+      ],
+      "status": "⚠️ 未实测",
+      "note": "价格极低，值得实测质量"
+    },
+    {
+      "platform": "Evolink",
+      "id": "mj-v8.1",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.54,
+      "priceSource": "measured",
+      "priceEvidence": "实测 5.4 credits = ¥0.54",
+      "latencySec": 57,
+      "quality": {
+        "grade": "待评",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 841KB、无崩坏"
+      },
+      "scenes": [
+        "强风格化",
+        "艺术海报"
+      ],
+      "status": "✅ 可用",
+      "note": "最贵的图片模型（¥0.54/张），按需使用"
+    },
+    {
+      "platform": "Evolink",
+      "id": "doubao-seedance-1.0-pro-fast",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.04,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.0060/输出秒（480p）",
+      "scenes": [
+        "低成本短视频画面"
+      ],
+      "status": "⚠️ 未实测",
+      "note": "30 秒 ≈ ¥1.2"
+    },
+    {
+      "platform": "Evolink",
+      "id": "seedance-1.5-pro",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.087,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.013/输出秒（480p 无音轨）",
+      "quality": {
+        "grade": "待评",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "尚未实拍验证"
+      },
+      "scenes": [
+        "短视频画面",
+        "性价比首选"
+      ],
+      "status": "✅ 可用",
+      "note": "30 秒 ≈ ¥2.6；性价比最佳"
+    },
+    {
+      "platform": "Evolink",
+      "id": "wan2.5-image-to-video",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.25,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.038/输出秒（480p）",
+      "scenes": [
+        "图生视频"
+      ],
+      "status": "✅ 可用"
+    },
+    {
+      "platform": "Evolink",
+      "id": "wan2.6-text-to-video",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.5,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.075/输出秒（720p）",
+      "scenes": [
+        "720p 短视频"
+      ],
+      "status": "✅ 可用"
+    },
+    {
+      "platform": "Evolink",
+      "id": "kling-o3-text-to-video",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.54,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.080/输出秒（720p 无声）",
+      "scenes": [
+        "高质量短视频"
+      ],
+      "status": "✅ 可用",
+      "note": "30 秒 ≈ ¥16"
+    },
+    {
+      "platform": "Evolink",
+      "id": "kling-v3-turbo",
+      "kind": "video",
+      "unit": "秒",
+      "price": 0.71,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.106/输出秒（720p）",
+      "scenes": [
+        "高质量短视频"
+      ],
+      "status": "✅ 可用",
+      "note": "30 秒 ≈ ¥21"
+    },
+    {
+      "platform": "Evolink",
+      "id": "veo3.1-fast",
+      "kind": "video",
+      "unit": "段(8秒)",
+      "price": 2.13,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.318/段（720p 8 秒）",
+      "scenes": [
+        "广告级短片"
+      ],
+      "status": "✅ 可用",
+      "note": "30 秒需 4 段 ≈ ¥8.5"
+    },
+    {
+      "platform": "Evolink",
+      "id": "veo3.1-pro",
+      "kind": "video",
+      "unit": "段(8秒)",
+      "price": 15.97,
+      "priceSource": "official",
+      "priceEvidence": "官方 $2.383/段（720p 8 秒）",
+      "scenes": [
+        "顶级广告片"
+      ],
+      "status": "✅ 可用",
+      "note": "最贵；30 秒 ≈ ¥64"
+    },
+    {
+      "platform": "Evolink",
+      "id": "omnihuman-1.5",
+      "kind": "avatar",
+      "unit": "音频秒",
+      "price": 1.19,
+      "priceSource": "official",
+      "priceEvidence": "官方 $0.177/输入音频秒",
+      "scenes": [
+        "数字人口播"
+      ],
+      "status": "✅ 可用",
+      "note": "15 秒 ≈ ¥18；30 秒 ≈ ¥36；60 秒 ≈ ¥71。火山引擎自家也有数字人，建议比价"
+    },
+    {
+      "platform": "火山引擎",
+      "id": "doubao-seedream-5-0-pro",
+      "kind": "image",
+      "unit": "张",
+      "price": 0.3,
+      "priceSource": "measured",
+      "scenes": [
+        "中文元素画面"
+      ],
+      "status": "✅ 可用",
+      "note": "即梦 5.0；比 MXAPI 的 gpt-image-2（¥0.10）贵，但有 ¥262 余额可用",
+      "priceEvidence": "余额差法：¥262.28 → ¥261.98（后付费结算到账后）",
+      "quality": {
+        "grade": "A-",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "实测 1 张成功、无崩坏"
+      }
+    },
+    {
+      "platform": "火山引擎",
+      "id": "doubao-seedance-*",
+      "kind": "video",
+      "unit": "秒",
+      "price": 1.0,
+      "priceSource": "official",
+      "priceEvidence": "官方 API 定价：Seedance 2.0 = ¥1/秒（ithome 2026-04）；Seedance 2.5(720p) ≈ ¥1.51/秒（aitop100）",
+      "scenes": [
+        "短视频画面"
+      ],
+      "status": "⚠️ 未实测",
+      "note": "直连火山引擎贵（¥1+/秒）；Evolink 中转 seedance-1.5-pro 仅 ¥0.087/秒，出片优先走 Evolink 省 10 倍。本机历史出片走火山引擎未逐次记账，价格待余额差法复核"
+    },
+    {
+      "platform": "本机",
+      "id": "edge-tts",
+      "kind": "tts",
+      "unit": "次",
+      "price": 0,
+      "priceSource": "measured",
+      "priceEvidence": "本机运行，无 API 费用",
+      "scenes": [
+        "配音",
+        "口播旁白"
+      ],
+      "status": "✅ 可用",
+      "note": "配音一律先用它，别走付费 TTS"
+    },
+    {
+      "platform": "本机",
+      "id": "ffmpeg",
+      "kind": "tool",
+      "unit": "次",
+      "price": 0,
+      "priceSource": "measured",
+      "scenes": [
+        "剪辑",
+        "字幕",
+        "拼接",
+        "转码"
+      ],
+      "status": "✅ 可用"
+    },
+    {
+      "platform": "本机",
+      "id": "html-render",
+      "kind": "image",
+      "unit": "张",
+      "price": 0,
+      "priceSource": "measured",
+      "priceEvidence": "浏览器截图渲染，无 API 费用",
+      "quality": {
+        "grade": "A",
+        "basis": "user-approved",
+        "byUser": "认可",
+        "evidence": "用户明确认可'假绿'数据配图风格；文字清晰可控"
+      },
+      "scenes": [
+        "数据配图",
+        "封面",
+        "图表",
+        "终端截图"
+      ],
+      "status": "✅ 可用",
+      "note": "★ 默认首选：成本 0、文字绝不糊、与正文强相关"
+    },
+    {
+      "platform": "智谱",
+      "id": "glm-4v-flash",
+      "kind": "vision",
+      "unit": "次",
+      "price": 0,
+      "priceSource": "measured",
+      "priceEvidence": "免费模型，实测可用",
+      "quality": {
+        "grade": "C+",
+        "basis": "objective",
+        "byUser": null,
+        "evidence": "能逐字转录与判断贴合度；但给不同图都打 9 分，分辨不出审美档次"
+      },
+      "scenes": [
+        "读图",
+        "OCR",
+        "文字校验",
+        "图片内容核验"
+      ],
+      "status": "✅ 可用",
+      "note": "仅用于客观核验，不要用它做审美评判"
+    },
+    {
+      "platform": "Kimi",
+      "id": "moonshot-kimi",
+      "kind": "llm",
+      "unit": "篇次",
+      "price": 0.2,
+      "priceSource": "estimate",
+      "priceEvidence": "按 2000 字稿估算；未逐次测量（可用余额差法精确测）",
+      "scenes": [
+        "中文长文写作",
+        "公众号正文"
+      ],
+      "status": "✅ 可用",
+      "note": "余额 ¥99.43"
+    },
+    {
+      "platform": "DeepSeek",
+      "id": "deepseek-v4-pro",
+      "kind": "llm",
+      "unit": "1M token",
+      "price": 27.6,
+      "priceSource": "measured",
+      "priceEvidence": "余额差法窗口实测 ¥27.6/1M（3.2 万 token 窗口）；与早前 ¥0.7/10分钟 口径互相印证。官方计费：cache 命中 ¥0.02/1M、未命中输入 ¥1/1M（价差 50 倍）",
+      "scenes": [
+        "Agent 推理",
+        "代码",
+        "分析",
+        "本会话默认模型"
+      ],
+      "status": "✅ 可用",
+      "note": "⚠️ 真正烧钱的大头：余额 ¥64.69 且持续下降，硬地板 ¥8；混合费率 ≈¥27.6/1M，是早前估算 ¥5 的 5.5 倍"
+    },
+    {
+      "platform": "DeepSeek",
+      "id": "deepseek-v4-flash",
+      "kind": "llm",
+      "unit": "1M token",
+      "price": 1.5,
+      "priceSource": "official",
+      "priceEvidence": "官方（2026-09 降价后）：输出 ¥4/1M、输入未命中 ¥1/1M、cache 命中 ¥0.02/1M；Agent 场景输入为主，混合估 ≈¥1.5/1M",
+      "scenes": [
+        "快答",
+        "轻量任务",
+        "低成本默认"
+      ],
+      "status": "✅ 可用",
+      "note": "会话已实测 2.81M token；比 v4-pro 便宜约 18 倍，轻量任务优先用 flash"
+    },
+    {
+      "platform": "DeepSeek",
+      "id": "deepseek-v4-flash-vision-exp",
+      "kind": "llm",
+      "unit": "1M token",
+      "price": 2.0,
+      "priceSource": "estimate",
+      "priceEvidence": "flash 系多模态（图文）版，视觉 token 略贵于纯文本 flash；估 ≈¥2/1M（官方分价：输出 ¥4/输入 ¥1/cache ¥0.02）",
+      "scenes": [
+        "读图",
+        "图文理解",
+        "本会话视觉默认"
+      ],
+      "status": "✅ 可用",
+      "note": "会话已实测 1.69M token；读图/核验优先用它，比 pro 便宜"
+    },
+    {
+      "platform": "Kimi",
+      "id": "kimi-k2.6",
+      "kind": "llm",
+      "unit": "1M token",
+      "price": null,
+      "priceSource": "unknown",
+      "priceEvidence": "Moonshot 按 token 计费；本机会话暂无用量，待余额差法标定或查官方价",
+      "scenes": [
+        "中文长文",
+        "长上下文",
+        "公众号正文"
+      ],
+      "status": "✅ 可用",
+      "note": "余额 ¥99.43"
+    },
+    {
+      "platform": "智谱",
+      "id": "glm-5.2",
+      "kind": "llm",
+      "unit": "套餐",
+      "price": null,
+      "priceSource": "unknown",
+      "priceEvidence": "zai-coding-cn 为 coding 订阅套餐，无 token 单价；会话已实测 753K token，费用计入套餐额度",
+      "scenes": [
+        "代码",
+        "Agent 编码"
+      ],
+      "status": "✅ 可用",
+      "note": "coding 套餐按额度，不计单 token 价"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "wechat-article-free",
+      "name": "公众号图文（省钱版：HTML 渲染配图）",
+      "steps": [
+        {
+          "label": "封面 + 2 张配图（HTML 渲染）",
+          "platform": "本机",
+          "model": "html-render",
+          "qty": 3,
+          "cost": 0,
+          "priceSource": "measured"
+        },
+        {
+          "label": "正文（Kimi）",
+          "platform": "Kimi",
+          "model": "moonshot-kimi",
+          "qty": 1,
+          "cost": 0.2,
+          "priceSource": "estimate"
+        }
+      ]
+    },
+    {
+      "id": "wechat-article-ai",
+      "name": "公众号图文（AI 出图版）",
+      "steps": [
+        {
+          "label": "封面 + 2 张配图（nano-banana-2）",
+          "platform": "MXAPI",
+          "model": "nano-banana-2",
+          "qty": 3,
+          "cost": 0.6,
+          "priceSource": "measured"
+        },
+        {
+          "label": "正文（Kimi）",
+          "platform": "Kimi",
+          "model": "moonshot-kimi",
+          "qty": 1,
+          "cost": 0.2,
+          "priceSource": "estimate"
+        }
+      ]
+    },
+    {
+      "id": "short-video-30s-cheap",
+      "name": "30 秒竖版短视频（低成本）",
+      "steps": [
+        {
+          "label": "画面（Seedance 1.0 Pro Fast）",
+          "platform": "Evolink",
+          "model": "doubao-seedance-1.0-pro-fast",
+          "qty": 30,
+          "cost": 1.2,
+          "priceSource": "official"
+        },
+        {
+          "label": "配音（edge-tts）",
+          "platform": "本机",
+          "model": "edge-tts",
+          "qty": 1,
+          "cost": 0,
+          "priceSource": "measured"
+        },
+        {
+          "label": "剪辑合成（ffmpeg）",
+          "platform": "本机",
+          "model": "ffmpeg",
+          "qty": 1,
+          "cost": 0,
+          "priceSource": "measured"
+        }
+      ]
+    },
+    {
+      "id": "short-video-30s-best",
+      "name": "30 秒竖版短视频（性价比首选）",
+      "steps": [
+        {
+          "label": "画面（Seedance 1.5 Pro）",
+          "platform": "Evolink",
+          "model": "seedance-1.5-pro",
+          "qty": 30,
+          "cost": 2.61,
+          "priceSource": "official"
+        },
+        {
+          "label": "配音（edge-tts）",
+          "platform": "本机",
+          "model": "edge-tts",
+          "qty": 1,
+          "cost": 0,
+          "priceSource": "measured"
+        },
+        {
+          "label": "剪辑合成（ffmpeg）",
+          "platform": "本机",
+          "model": "ffmpeg",
+          "qty": 1,
+          "cost": 0,
+          "priceSource": "measured"
+        }
+      ]
+    },
+    {
+      "id": "avatar-30s",
+      "name": "30 秒数字人口播",
+      "steps": [
+        {
+          "label": "数字人（OmniHuman 1.5）",
+          "platform": "Evolink",
+          "model": "omnihuman-1.5",
+          "qty": 30,
+          "cost": 35.7,
+          "priceSource": "official"
+        },
+        {
+          "label": "配音（edge-tts）",
+          "platform": "本机",
+          "model": "edge-tts",
+          "qty": 1,
+          "cost": 0,
+          "priceSource": "measured"
+        }
+      ]
+    },
+    {
+      "id": "xhs-6-images",
+      "name": "小红书一套 6 张图",
+      "steps": [
+        {
+          "label": "配图 ×6（nano-banana-2）",
+          "platform": "MXAPI",
+          "model": "nano-banana-2",
+          "qty": 6,
+          "cost": 1.2,
+          "priceSource": "measured"
+        }
+      ]
+    }
+  ]
+}

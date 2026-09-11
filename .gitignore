@@ -1,0 +1,27 @@
+# 依赖与构建产物
+node_modules/
+*.tgz
+
+# 本机运行时数据 —— 绝不入库
+#   cost-manager 的真实记账明细与本机阈值
+ledger.jsonl
+config.json
+**/lib/core/data/ledger.jsonl
+**/lib/core/data/config.json
+
+# DSH / agents 运行时状态
+.dsh/
+*.jsonl.zstd
+sessions/
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志与临时文件
+*.log
+tmp/
+_backup-*/

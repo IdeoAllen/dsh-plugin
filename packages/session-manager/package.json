@@ -1,0 +1,51 @@
+{
+  "name": "@chengge/dsh-session-manager",
+  "version": "0.1.0",
+  "description": "DSH 会话管理插件（dshm）：设置页「会话管理」面板 + 3082 端口上的完整 dshm 界面（会话列表/全文搜索/每步 token 趋势/导出/归档）。",
+  "license": "Apache-2.0",
+  "author": "成哥聊AI (赵成成)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IdeoAllen/dsh-plugin.git",
+    "directory": "packages/session-manager"
+  },
+  "homepage": "https://github.com/IdeoAllen/dsh-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/IdeoAllen/dsh-plugin/issues"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "session",
+    "dshm",
+    "harness"
+  ],
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./dsh.plugin.json": "./dsh.plugin.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "dsh.plugin.json",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "engines": {
+    "node": ">=22.19"
+  }
+}

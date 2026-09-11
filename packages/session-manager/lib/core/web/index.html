@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>dshm · Harness 管理终端</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #161a22;
+    --panel2: #1c212c;
+    --border: #2a3140;
+    --text: #e6e9ef;
+    --muted: #8b93a5;
+    --accent: #5b8cff;
+    --green: #3ecf8e;
+    --yellow: #f5c542;
+    --red: #f26d6d;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Roboto, sans-serif;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px; border-bottom: 1px solid var(--border);
+    background: var(--panel); position: sticky; top: 0; z-index: 10;
+  }
+  .brand { font-size: 17px; font-weight: 700; }
+  .brand span { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 8px; }
+  .toolbar { display: flex; align-items: center; gap: 16px; }
+  .toolbar a { color: var(--accent); text-decoration: none; }
+  button {
+    background: var(--accent); color: #fff; border: 0; border-radius: 7px;
+    padding: 6px 14px; cursor: pointer; font-size: 13px;
+  }
+  button.ghost { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+  label.inline { color: var(--muted); font-size: 13px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 22px 60px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .card .k { color: var(--muted); font-size: 12px; }
+  .card .v { font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .card .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  .goalbar {
+    margin-top: 14px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 16px;
+  }
+  .goalbar .k { color: var(--muted); font-size: 12px; }
+  .goalbar .text { margin-top: 4px; }
+  .goalbar .meta { color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+  .panel { margin-top: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+  }
+  .panel-head h2 { margin: 0; font-size: 15px; }
+  .filters { display: flex; align-items: center; gap: 14px; }
+  .filters input[type=text] {
+    background: var(--panel2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 7px; padding: 6px 10px; font-size: 13px; width: 240px;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  tbody tr { cursor: pointer; }
+  tbody tr:hover { background: var(--panel2); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .badge { font-size: 11px; padding: 1px 7px; border-radius: 20px; }
+  .badge.archived { background: rgba(242,109,109,.15); color: var(--red); }
+  .badge.active { background: rgba(62,207,142,.15); color: var(--green); }
+  .muted { color: var(--muted); }
+  .empty { padding: 30px; text-align: center; color: var(--muted); }
+
+  /* 抽屉 */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 20; }
+  .overlay.show { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: 460px; max-width: 92vw;
+    background: var(--panel); border-left: 1px solid var(--border); z-index: 30;
+    transform: translateX(100%); transition: transform .18s ease; overflow-y: auto;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--panel);
+  }
+  .drawer-head .close { cursor: pointer; color: var(--muted); font-size: 20px; line-height: 1; }
+  .drawer-body { padding: 16px 18px; }
+  .drawer h3 { margin: 18px 0 8px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .drawer h3:first-child { margin-top: 0; }
+  .kv { display: flex; gap: 12px; padding: 3px 0; font-size: 13px; }
+  .kv .k { color: var(--muted); min-width: 110px; flex-shrink: 0; }
+  .kv .v { word-break: break-all; }
+  .uri { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--panel2); border: 1px solid var(--border); border-radius: 6px; padding: 8px; word-break: break-all; }
+  .actions { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+  .todo { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; font-size: 13px; }
+  .dot { color: var(--muted); }
+  .todo.done { color: var(--muted); }
+  .foot { color: var(--muted); font-size: 12px; margin-top: 20px; }
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 9px 16px; font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 40;
+  }
+  .toast.show { opacity: 1; }
+
+  /* 全局搜索 */
+  #globalSearch {
+    background: var(--panel2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 7px; padding: 6px 10px; font-size: 13px; width: 220px;
+  }
+  .modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(.98);
+    width: 680px; max-width: 92vw; max-height: 80vh; background: var(--panel);
+    border: 1px solid var(--border); border-radius: 12px; z-index: 40;
+    display: none; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+  .modal.show { display: flex; }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+  }
+  .modal-head .close { cursor: pointer; color: var(--muted); font-size: 20px; line-height: 1; }
+  .modal-body { padding: 14px 18px; overflow-y: auto; }
+  .result {
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+    margin-bottom: 10px; cursor: pointer; background: var(--panel2);
+  }
+  .result:hover { border-color: var(--accent); }
+  .result .meta { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+  .result .snippet { font-size: 13px; white-space: pre-wrap; word-break: break-word; }
+  .result mark { background: rgba(245,197,66,.25); color: var(--yellow); padding: 0 1px; border-radius: 2px; }
+  .role { font-size: 11px; padding: 1px 7px; border-radius: 20px; margin-right: 6px; }
+  .role.user { background: rgba(91,140,255,.18); color: var(--accent); }
+  .role.assistant { background: rgba(62,207,142,.16); color: var(--green); }
+  .trend-box { margin-top: 8px; }
+  .trend-summary { color: var(--muted); font-size: 12px; margin: 8px 0; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">dshm<span>管理看板（非聊天）· 对话请用原生 Web GUI</span></div>
+  <div class="toolbar">
+    <input type="text" id="globalSearch" placeholder="全文搜索会话内容…" />
+    <button class="ghost" id="searchBtn">搜索</button>
+    <a id="guiLink" href="#" target="_blank" rel="noopener">打开 Web GUI ↗</a>
+    <label class="inline"><input type="checkbox" id="autoRefresh" checked /> 自动刷新</label>
+    <button class="ghost" id="refreshBtn">刷新</button>
+  </div>
+</header>
+
+<main>
+  <section class="cards">
+    <div class="card"><div class="k">工作区</div><div class="v" id="cardWs">—</div></div>
+    <div class="card"><div class="k">会话</div><div class="v" id="cardSess">—</div><div class="sub" id="cardArch">已归档 —</div></div>
+    <div class="card"><div class="k">输出 token</div><div class="v" id="cardOut">—</div></div>
+    <div class="card"><div class="k">输入 token</div><div class="v" id="cardIn">—</div></div>
+    <div class="card"><div class="k">缓存读取</div><div class="v" id="cardCache">—</div></div>
+    <div class="card"><div class="k">上下文峰值</div><div class="v" id="cardCtx">—</div></div>
+  </section>
+
+  <section class="goalbar" id="goalBar" style="display:none">
+    <div class="k">当前目标</div>
+    <div class="text" id="goalText">—</div>
+    <div class="meta" id="goalMeta"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>会话</h2>
+      <div class="filters">
+        <input type="text" id="search" placeholder="搜索标题 / id / 工作区" />
+        <label class="inline"><input type="checkbox" id="showArchived" /> 显示已归档</label>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>会话</th><th>工作区</th><th>标题</th><th>更新时间</th>
+          <th class="num">轮次</th><th class="num">输出</th><th class="num">上下文</th><th>状态</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">没有匹配的会话</div>
+  </section>
+
+  <div class="foot">DSH 主目录：<span id="homePath">—</span> · 数据只读（除归档操作）</div>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="brand" id="drawerTitle">会话详情</div>
+    <div class="close" id="drawerClose">✕</div>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+<div class="modal" id="searchModal">
+  <div class="modal-head">
+    <div class="brand" id="searchTitle">全文搜索</div>
+    <div class="close" id="searchClose">✕</div>
+  </div>
+  <div class="modal-body" id="searchResults"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const fmtNum = (n) => {
+  if (n == null || Number.isNaN(n)) return "—";
+  const a = Math.abs(n);
+  if (a >= 1e9) return (n / 1e9).toFixed(2) + "B";
+  if (a >= 1e6) return (n / 1e6).toFixed(2) + "M";
+  if (a >= 1e3) return (n / 1e3).toFixed(1) + "k";
+  return String(Math.round(n));
+};
+const fmtPct = (p) => (p == null ? "—" : p.toFixed(1) + "%");
+const timeAgo = (t) => {
+  if (t == null) return "—";
+  let d = Date.now() - t; if (d < 0) d = 0;
+  if (d < 6e4) return "刚刚";
+  if (d < 36e5) return Math.floor(d / 6e4) + " 分钟前";
+  if (d < 864e5) return Math.floor(d / 36e5) + " 小时前";
+  if (d < 7 * 864e5) return Math.floor(d / 864e5) + " 天前";
+  return new Date(t).toLocaleDateString();
+};
+const fmtDate = (t) => t == null ? "—" : new Date(t).toLocaleString();
+const fmtMs = (ms) => {
+  if (ms == null) return "—";
+  if (ms < 1000) return Math.round(ms) + "ms";
+  const s = ms / 1000; if (s < 60) return s.toFixed(1) + "s";
+  const m = s / 60; if (m < 60) return m.toFixed(1) + "m";
+  return (m / 60).toFixed(1) + "h";
+};
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+let DATA = null;
+
+async function load() {
+  const res = await fetch("/api/overview");
+  DATA = await res.json();
+  render();
+}
+function render() {
+  const d = DATA;
+  $("cardWs").textContent = d.workspaces;
+  $("cardSess").textContent = d.sessions;
+  $("cardArch").textContent = "已归档 " + d.archived;
+  $("cardOut").textContent = fmtNum(d.usage.outputTokens);
+  $("cardIn").textContent = fmtNum(d.usage.inputTokens);
+  $("cardCache").textContent = fmtNum(d.usage.cacheReadTokens);
+  $("cardCtx").textContent = d.usage.maxContextPct == null ? "—" : d.usage.maxContextPct.toFixed(1) + "%";
+  $("homePath").textContent = d.home;
+  $("guiLink").href = d.webUrl;
+
+  const g = d.goal;
+  if (g && g.objective) {
+    $("goalBar").style.display = "";
+    $("goalText").textContent = g.objective;
+    $("goalMeta").textContent = `${g.phase ?? "?"} · round ${g.roundsStarted ?? 0}/${g.maxGoalRounds ?? "?"} · ${g.sessionId ? g.sessionId.replace("session-", "").slice(0, 8) : ""}`;
+  } else {
+    $("goalBar").style.display = "none";
+  }
+
+  renderRows();
+}
+function renderRows() {
+  const q = $("search").value.trim().toLowerCase();
+  const showArch = $("showArchived").checked;
+  const list = (DATA.sessionList || []).filter((s) => {
+    if (!showArch && s.archived) return false;
+    if (!q) return true;
+    return [s.title, s.id, s.workspace, s.cwd].some((x) => (x || "").toLowerCase().includes(q));
+  });
+  const tbody = $("rows");
+  tbody.innerHTML = "";
+  $("empty").style.display = list.length ? "none" : "";
+  for (const s of list) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${esc(s.shortId)}</td>
+      <td>${s.workspace ? esc(s.workspace) : '<span class="muted">未分组</span>'}</td>
+      <td>${s.title ? esc(s.title) : '<span class="muted">(未命名)</span>'}</td>
+      <td class="muted">${esc(timeAgo(s.updatedAt))}</td>
+      <td class="num">${s.turns ?? "—"}</td>
+      <td class="num">${fmtNum(s.outputTokens)}</td>
+      <td class="num">${fmtPct(s.contextPct)}</td>
+      <td>${s.archived ? '<span class="badge archived">已归档</span>' : '<span class="badge active">活跃</span>'}</td>`;
+    tr.addEventListener("click", () => openDetail(s.id));
+    tbody.appendChild(tr);
+  }
+}
+
+async function openDetail(id) {
+  const res = await fetch("/api/session?id=" + encodeURIComponent(id));
+  if (!res.ok) { toast("加载失败"); return; }
+  const s = await res.json();
+  if (s.ambiguous) { toast("id 不唯一，请用完整 id"); return; }
+  $("drawerTitle").textContent = "会话 " + s.shortId;
+  const b = $("drawerBody");
+  const kv = (k, v) => `<div class="kv"><span class="k">${esc(k)}</span><span class="v">${v}</span></div>`;
+  const ctx = s.contextPressure || {};
+  const cb = s.contextBreakdown || {};
+  const perm = s.permissions || {};
+  const ctxLine = s.contextUsed != null
+    ? `${fmtNum(s.contextUsed)} / ${fmtNum(s.contextWindow)} (${fmtPct(s.contextPct)})`
+    : "—";
+  const todosHtml = (Array.isArray(s.todos) && s.todos.length)
+    ? s.todos.map((t) => {
+        const c = typeof t === "string" ? t : t.content;
+        const st = typeof t === "string" ? null : t.status;
+        const dot = st === "completed" ? '<span class="dot" style="color:var(--green)">✓</span>' : st === "in_progress" ? '<span class="dot" style="color:var(--yellow)">▶</span>' : '<span class="dot">·</span>';
+        return `<div class="todo ${st === "completed" ? "done" : ""}">${dot}<span>${esc(c)}</span></div>`;
+      }).join("")
+    : '<div class="muted">（无）</div>';
+  const goalHtml = s.goal && s.goal.objective
+    ? `<div>${esc(s.goal.objective)}</div><div class="muted" style="margin-top:4px">${esc(s.goal.phase || "")} · round ${s.goal.roundsStarted ?? 0}/${s.goal.maxGoalRounds ?? "?"}</div>`
+    : '<div class="muted">（无）</div>';
+
+  b.innerHTML = `
+    ${kv("标题", s.title ? esc(s.title) : '<span class="muted">(未命名)</span>')}
+    ${kv("工作区", s.workspace ? esc(s.workspace) : '<span class="muted">未分组</span>')}
+    ${kv("路径", s.cwd ? esc(s.cwd) : "—")}
+    ${kv("创建时间", esc(fmtDate(s.createdAt)))}
+    ${kv("更新时间", esc(fmtDate(s.updatedAt)) + " (" + esc(timeAgo(s.updatedAt)) + ")")}
+    ${kv("状态", s.archived ? '<span class="badge archived">已归档</span>' : '<span class="badge active">活跃</span>')}
+
+    <h3>统计</h3>
+    ${kv("轮次", s.stats?.turns ?? "—")}
+    ${kv("步骤", s.stats?.steps ?? "—")}
+    ${kv("LLM 用时", fmtMs(s.stats?.llmMs))}
+    ${kv("工具用时", fmtMs(s.stats?.toolMs))}
+    ${kv("首 token", fmtMs(s.stats?.ttftMs))}
+    ${kv("解码 token", fmtNum(s.stats?.decodeTokens) + " (" + fmtMs(s.stats?.decodeMs) + ")")}
+
+    <h3>Token 用量</h3>
+    ${kv("输入(未缓存)", fmtNum(s.inputTokens))}
+    ${kv("输出", fmtNum(s.outputTokens))}
+    ${kv("缓存读取", fmtNum(s.cacheReadTokens))}
+    ${kv("缓存写入", fmtNum(s.cacheWriteTokens))}
+
+    <h3>上下文</h3>
+    ${kv("表层 token", ctxLine)}
+    ${kv("系统", fmtNum(cb.systemTokens))}
+    ${kv("工具", fmtNum(cb.toolsTokens))}
+    ${kv("消息", fmtNum(cb.messageTokens))}
+
+    <h3>权限</h3>
+    ${kv("预设", esc(perm.preset ?? "—"))}
+    ${kv("沙箱", esc(perm.sandbox ?? "—"))}
+    ${kv("审批", esc(perm.approval ?? "—"))}
+
+    <h3>目标</h3>
+    ${goalHtml}
+
+    <h3>待办</h3>
+    ${todosHtml}
+
+    <h3>用量趋势</h3>
+    <div class="trend-box" id="trendBox"><div class="muted">加载中…</div></div>
+    <div class="trend-summary" id="trendSummary"></div>
+
+    <h3>导出</h3>
+    <div class="actions">
+      <button class="ghost" onclick="downloadExport('${esc(s.id)}','md')">导出 Markdown</button>
+      <button class="ghost" onclick="downloadExport('${esc(s.id)}','json')">导出 JSON</button>
+    </div>
+
+    <h3>恢复</h3>
+    <div class="kv"><span class="k">Web GUI</span><span class="v"><a href="${esc(s.webUrl)}" target="_blank" rel="noopener">${esc(s.webUrl)}</a></span></div>
+    <div style="margin-top:8px" class="muted">引用 URI（跨会话 @mention）：</div>
+    <div class="uri" id="uriText">${esc(s.resumeUri)}</div>
+    <div class="actions">
+      <button class="ghost" onclick="copyUri()">复制引用 URI</button>
+      <button class="ghost" onclick="window.open('${esc(s.webUrl)}','_blank')">打开 Web GUI</button>
+      <button id="archiveBtn">${s.archived ? "取消归档" : "归档"}</button>
+    </div>
+  `;
+  $("archiveBtn").addEventListener("click", () => toggleArchive(s.id, !s.archived));
+  $("drawer").classList.add("show");
+  $("overlay").classList.add("show");
+  loadTrend(s.id);
+}
+
+async function toggleArchive(id, archived) {
+  const res = await fetch(`/api/archive?id=${encodeURIComponent(id)}&archived=${archived}`, { method: "POST" });
+  if (res.ok) { toast(archived ? "已归档" : "已取消归档"); closeDrawer(); load(); }
+  else toast("操作失败");
+}
+
+function copyUri() {
+  const el = $("uriText");
+  navigator.clipboard.writeText(el.textContent).then(() => toast("已复制")).catch(() => toast("复制失败"));
+}
+function closeDrawer() {
+  $("drawer").classList.remove("show");
+  $("overlay").classList.remove("show");
+}
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function downloadExport(id, format) {
+  window.location.href = "/api/export?id=" + encodeURIComponent(id) + "&format=" + format;
+}
+
+async function loadTrend(id) {
+  const box = $("trendBox");
+  const summary = $("trendSummary");
+  if (!box) return;
+  try {
+    const res = await fetch("/api/trend?id=" + encodeURIComponent(id));
+    const series = await res.json();
+    if (!Array.isArray(series) || !series.length) {
+      box.innerHTML = '<div class="muted">（无每步用量数据）</div>';
+      summary.textContent = "";
+      return;
+    }
+    const sum = (k) => series.reduce((a, p) => a + (p[k] || 0), 0);
+    const peak = Math.max(...series.map((p) => p.outputTokens || 0));
+    box.innerHTML = trendChart(series);
+    summary.textContent = `${series.length} 步 · 输出 ${fmtNum(sum("outputTokens"))} · 输入 ${fmtNum(sum("inputTokens"))} · 缓存读取 ${fmtNum(sum("cacheReadTokens"))} · 峰值 ${fmtNum(peak)}`;
+  } catch {
+    box.innerHTML = '<div class="muted">加载失败</div>';
+  }
+}
+
+function trendChart(series) {
+  const vals = series.map((p) => p.outputTokens || 0);
+  const max = Math.max(...vals, 1);
+  const W = 420, H = 80;
+  const bucket = Math.max(1, Math.ceil(vals.length / 120));
+  const pts = [];
+  for (let i = 0; i < vals.length; i += bucket) {
+    const s = vals.slice(i, i + bucket);
+    pts.push(s.reduce((a, b) => a + b, 0) / s.length);
+  }
+  const bw = W / pts.length;
+  let rects = "";
+  pts.forEach((v, i) => {
+    const h = Math.max(1.5, (v / max) * H);
+    rects += `<rect x="${(i * bw).toFixed(2)}" y="${(H - h).toFixed(1)}" width="${Math.max(1, bw - 0.5).toFixed(2)}" height="${h.toFixed(1)}" fill="#5b8cff" opacity="0.85"/>`;
+  });
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="background:var(--panel2);border:1px solid var(--border);border-radius:6px">${rects}</svg>`;
+}
+
+function escHighlight(text, q) {
+  const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+  const out = [];
+  let last = 0;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    out.push(esc(text.slice(last, m.index)));
+    out.push("<mark>" + esc(m[0]) + "</mark>");
+    last = m.index + m[0].length;
+    if (m.index === re.lastIndex) re.lastIndex++;
+  }
+  out.push(esc(text.slice(last)));
+  return out.join("");
+}
+
+async function doSearch() {
+  const q = $("globalSearch").value.trim();
+  if (!q) {
+    toast("请输入搜索词");
+    return;
+  }
+  $("searchTitle").textContent = "搜索 “" + q + "”";
+  $("searchResults").innerHTML = '<div class="muted">搜索中…</div>';
+  $("searchModal").classList.add("show");
+  try {
+    const res = await fetch("/api/search?q=" + encodeURIComponent(q));
+    const results = await res.json();
+    renderSearchResults(results, q);
+  } catch {
+    $("searchResults").innerHTML = '<div class="muted">搜索失败</div>';
+  }
+}
+
+function renderSearchResults(results, q) {
+  const box = $("searchResults");
+  if (!results.length) {
+    box.innerHTML = '<div class="muted">没有匹配</div>';
+    return;
+  }
+  box.innerHTML = results
+    .map(
+      (r) => `
+    <div class="result" onclick="openDetail('${esc(r.sessionId)}')">
+      <div class="meta">
+        <span class="role ${r.role}">${r.role === "user" ? "用户" : "助手"}</span>
+        <span>${esc(r.shortId)}</span> · ${esc(r.workspace || "未分组")} · ${esc(timeAgo(r.time))}${r.model ? " · " + esc(r.model) : ""}
+      </div>
+      <div class="snippet">${escHighlight(r.snippet, q)}</div>
+    </div>`
+    )
+    .join("");
+}
+
+function closeSearch() {
+  $("searchModal").classList.remove("show");
+}
+
+$("drawerClose").addEventListener("click", closeDrawer);
+$("overlay").addEventListener("click", closeDrawer);
+$("searchClose").addEventListener("click", closeSearch);
+$("searchBtn").addEventListener("click", doSearch);
+$("globalSearch").addEventListener("keydown", (e) => { if (e.key === "Enter") doSearch(); });
+$("refreshBtn").addEventListener("click", load);
+$("search").addEventListener("input", renderRows);
+$("showArchived").addEventListener("change", renderRows);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeDrawer(); closeSearch(); } });
+
+load();
+setInterval(() => { if ($("autoRefresh").checked && !$("drawer").classList.contains("show")) load(); }, 3000);
+</script>
+</body>
+</html>

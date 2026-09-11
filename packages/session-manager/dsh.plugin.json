@@ -1,0 +1,16 @@
+{
+  "id": "dsh-external/dsh-session-manager",
+  "version": "0.1.0",
+  "main": "./lib/index.js",
+  "description": "DSH 会话管理插件（dshm）：设置页「会话管理」面板，并把原先独立的 dshm 网页（8787）统一到 DSH 自身端口上（/dshm）。会话列表、跨会话全文搜索、每步 token 趋势、可读导出、归档/取消归档。",
+  "engines": {
+    "dsh": ">=0.1.1"
+  },
+  "contributes": {
+    "tools": [],
+    "skills": []
+  },
+  "client": {
+    "main": "./lib/client.js"
+  }
+}
