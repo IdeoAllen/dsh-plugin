@@ -1,10 +1,10 @@
-# @chengge/dsh-skill-catalog
+# @chengchengzhao/dsh-skill-catalog
 
 [中文](README.zh.md) | English
 
 A **skill catalog** for the DeepSeek Harness (DSH) Web GUI. Third plugin in the
-`@chengge/dsh-*` family, alongside `@chengge/dsh-cost-manager` (cost & balance) and
-`@chengge/dsh-session-manager` (session management) — same authoring conventions,
+`@chengchengzhao/dsh-*` family, alongside `@chengchengzhao/dsh-cost-manager` (cost & balance) and
+`@chengchengzhao/dsh-session-manager` (session management) — same authoring conventions,
 same visual language.
 
 ## Where it appears
@@ -15,7 +15,7 @@ same visual language.
 | **Settings → skill catalog** | In-GUI panel that follows the DSH theme (light/dark). Uses an **adaptive card list**, not a wide table. |
 | **`/skills`** | Standalone full-page dashboard, sharing the dark design tokens with the other two boards. |
 
-The three `@chengge` panels sit together in Settings, in the order
+The three `@chengchengzhao` panels sit together in Settings, in the order
 **cost (45) → sessions (46) → skills (47)**.
 
 > This plugin deliberately takes **no sidebar entry** of its own — the sidebar's
@@ -95,13 +95,13 @@ In the profile's `package.json`:
 
 ```json
 "dependencies": {
-  "@chengge/dsh-skill-catalog": "link:<path-to>/dsh-plugin"
+  "@chengchengzhao/dsh-skill-catalog": "link:<path-to>/dsh-plugin"
 },
-"dsh": { "profile": { "bundles": [ "...", "@chengge/dsh-skill-catalog" ] } }
+"dsh": { "profile": { "bundles": [ "...", "@chengchengzhao/dsh-skill-catalog" ] } }
 ```
 
-`node_modules/@chengge/dsh-skill-catalog` must be a **junction** pointing at that
-directory, matching the other `@chengge` plugins.
+`node_modules/@chengchengzhao/dsh-skill-catalog` must be a **junction** pointing at that
+directory, matching the other `@chengchengzhao` plugins.
 
 Changing `bundles` **requires a DSH restart** — the bundle list is composed at boot.
 (`patchReload: "live"` only hot-reloads `cordis.patch.yml` changes.)

@@ -1,4 +1,4 @@
-# @chengge/dsh-session-manager
+# @chengchengzhao/dsh-session-manager
 
 [中文](README.zh.md) | English
 

@@ -10,9 +10,9 @@ as a single product rather than three unrelated add-ons.
 
 | Package | What it does | Entry points |
 | --- | --- | --- |
-| [`@chengge/dsh-cost-manager`](packages/cost-manager) | Balances, spend, burn rate, model price alignment and the anti-death floor. Registers 4 agent-callable tools. | Settings panel · `/cost` · `/board` |
-| [`@chengge/dsh-session-manager`](packages/session-manager) | Session browsing, cross-session full-text search, per-step token trends, export and archive. Folds the standalone dshm app onto the DSH port. | Settings panel · `/dshm` |
-| [`@chengge/dsh-skill-catalog`](packages/skill-catalog) | Skill catalog: what each skill is, how to use it, its trigger conditions, boundary, related models and verification level. | Settings panel · `/skills` · ops-board tab |
+| [`@chengchengzhao/dsh-cost-manager`](packages/cost-manager) | Balances, spend, burn rate, model price alignment and the anti-death floor. Registers 4 agent-callable tools. | Settings panel · `/cost` · `/board` |
+| [`@chengchengzhao/dsh-session-manager`](packages/session-manager) | Session browsing, cross-session full-text search, per-step token trends, export and archive. Folds the standalone dshm app onto the DSH port. | Settings panel · `/dshm` |
+| [`@chengchengzhao/dsh-skill-catalog`](packages/skill-catalog) | Skill catalog: what each skill is, how to use it, its trigger conditions, boundary, related models and verification level. | Settings panel · `/skills` · ops-board tab |
 
 The **ops board** (`/board`, provided by `cost-manager`) is one thin tab strip over
 same-origin iframes, so all three dashboards live in a single browser tab. Switching
@@ -28,9 +28,9 @@ tabs only toggles `display` — iframes stay mounted and keep their state.
 
 ```bash
 # from a DSH profile directory
-dsh plugin --profile web add @chengge/dsh-cost-manager
-dsh plugin --profile web add @chengge/dsh-session-manager
-dsh plugin --profile web add @chengge/dsh-skill-catalog
+dsh plugin --profile web add @chengchengzhao/dsh-cost-manager
+dsh plugin --profile web add @chengchengzhao/dsh-session-manager
+dsh plugin --profile web add @chengchengzhao/dsh-skill-catalog
 ```
 
 Changing the profile's `bundles` list **requires a DSH restart** — bundles are

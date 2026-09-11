@@ -1,4 +1,4 @@
 # 组合补丁：安装后把插件行插入 profile 组合。
 - insert:
     - id: cost-manager
-      name: '@chengge/dsh-cost-manager'
+      name: '@chengchengzhao/dsh-cost-manager'
